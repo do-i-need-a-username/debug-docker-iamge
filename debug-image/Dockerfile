@@ -68,13 +68,10 @@ RUN go install github.com/mikefarah/yq/v4@latest
 
 # Instal mongo lcient
 RUN wget -qO- https://www.mongodb.org/static/pgp/server-7.0.asc \
-    | tee /etc/apt/trusted.gpg.d/server-7.0.asc \&&
+    | tee /etc/apt/trusted.gpg.d/server-7.0.asc && \
     echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" \
-    | tee /etc/apt/sources.list.d/mongodb-org-7.0.list \&&
+    | tee /etc/apt/sources.list.d/mongodb-org-7.0.list && \
     apt-get update -y && apt-get install -y mongodb-mongosh
-
-apt-get update
-apt-get install -y mongodb-mongosh
 
 RUN apt-get clean -qq -y && \
     apt-get autoclean -qq -y && \
