@@ -4,13 +4,7 @@ FROM ${BASE_IMAGE}
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-COPY --from=golang:latest /usr/local/go/ /usr/local/go/
-
-ENV GOROOT=/usr/local/go/
-ENV GOPATH="${HOME}/go"
-ENV PATH="${PATH}:${GOROOT}/bin:${GOPATH}/bin"
-
-RUN apt-get update -qq  &&\
+RUN apt-get update -y -qq  &&\
 # command line tool for transferring data with URL syntax
 apt-get install curl \
 # gpg tools
@@ -27,8 +21,6 @@ iputils-ping \
 jq \
 # List Open Files
 lsof \
-# ltrace intercepts and records the dynamic library calls
-ltrace \
 # Includes arp, ifconfig, netstat, rarp, nameif and route.
 net-tools \
 # TCP/IP swiss army knife
@@ -50,7 +42,7 @@ wget \
 # database client package for PostgreSQL.
 postgresql-client \
 # mysql database client
-mysql-client \
+default-mysql-client \
 # captures data transmitted as part of TCP connections
 tcpflow \
 # Vim is an almost compatible version of the UNIX editor Vi.
@@ -61,6 +53,12 @@ nano \
 sudo \
 # common files for software-properties, ca-certificates, python3
 software-properties-common -y -qq
+
+# Install go and set path.
+COPY --from=golang:latest /usr/local/go/ /usr/local/go/
+ENV GOROOT=/usr/local/go/
+ENV GOPATH="${HOME}/go"
+ENV PATH="${PATH}:${GOROOT}/bin:${GOPATH}/bin"
 
 # lightweight and portable command-line YAML, JSON and XML processor. yq uses jq like syntax but works with yaml files as well as json, xml, properties, csv and tsv.
 RUN go install github.com/mikefarah/yq/v4@latest
