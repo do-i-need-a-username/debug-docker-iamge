@@ -1,0 +1,31 @@
+name: Linting
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths-ignore:
+      - '.github/**'
+      - '.pipeline/**'
+      - 'README.md'
+
+concurrency:
+  # github.workflow: name of the workflow
+  # github.ref: "refs/heads/<branch_name>", "refs/tags/<tag_name>" or "refs/pull/<pr_number>/merge"
+  group: ${{ github.workflow }}-${{ github.ref }}-CI
+  # Cancel in-progress runs when a new workflow with the same group name is triggered
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    name: Hadolint Dockerfile linting
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Lint dockerfiles
+      id: hadolint
+      uses: hadolint/hadolint-action@v3.1.0
+      with:
+        recursive: true
