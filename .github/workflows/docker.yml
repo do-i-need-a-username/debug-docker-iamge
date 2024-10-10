@@ -6,7 +6,7 @@ on:
         - main
     schedule:
       # At 20:00 UTC everyday (roughly 06:00 AEST)
-      - cron: '0 20 * * *'
+      - cron: '0 20 * * 0'
     workflow_dispatch:
       inputs:
         dockerfile_dir:
